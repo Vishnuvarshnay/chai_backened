@@ -1,7 +1,16 @@
 import dotenv from 'dotenv'
+dotenv.config();
+// 👇 YAHI ADD KARNA HAI
+console.log("ENV CHECK 👉", {
+  CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
+  API_KEY: process.env.CLOUDINARY_API_KEY,
+  API_SECRET: process.env.CLOUDINARY_API_SECRET,
+});
+
 import connectDB from "./db/index.js";
 import app from './app.js';
-dotenv.config();
+
+
 
 connectDB()
 .then(() => {
