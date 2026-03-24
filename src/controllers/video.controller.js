@@ -37,6 +37,20 @@ const getAllVideos = asyncHandler(async (req, res) => {
     const direction = sortType === "desc" ? -1 : 1;
     pipeline.push({ $sort: { [sortBy]: direction } });
 
+    // Add lookup for owner details
+    pipeline.push({
+        $lookup: {
+            from: "users",
+            localField: "owner",
+            foreignField: "_id",
+            as: "owner",
+            pipeline: [
+                { $project: { username: 1, avatar: 1, fullName: 1 } }
+            ]
+        }
+    });
+    pipeline.push({ $addFields: { owner: { $first: "$owner" } } });
+
     const videoAggregate = Video.aggregate(pipeline);
 
     const options = {
@@ -196,11 +210,31 @@ const togglePublishStatus = asyncHandler(async (req, res) => {
     );
 });
 
+// 7. INCREMENT VIDEO VIEWS
+const incrementVideoViews = asyncHandler(async (req, res) => {
+    const { videoId } = req.params;
+
+    if (!isValidObjectId(videoId)) throw new ApiError(400, "Invalid Video ID");
+
+    const video = await Video.findByIdAndUpdate(
+        videoId,
+        { $inc: { views: 1 } },
+        { new: true }
+    );
+
+    if (!video) throw new ApiError(404, "Video not found");
+
+    return res.status(200).json(
+        new ApiResponse(200, { views: video.views }, "Video views incremented")
+    );
+});
+
 export {
     getAllVideos,
     publishAVideo,
     getVideoById,
     updateVideo,
     deleteVideo,
-    togglePublishStatus
+    togglePublishStatus,
+    incrementVideoViews
 }

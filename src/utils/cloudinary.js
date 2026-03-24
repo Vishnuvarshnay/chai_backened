@@ -12,10 +12,10 @@ cloudinary.config({
 });
 
 // 👇 ADD THIS HERE
-console.log("CLOUDINARY CONFIG 👉", {
-  name: process.env.CLOUDINARY_CLOUD_NAME,
-  key: process.env.CLOUDINARY_API_KEY,
-});
+// console.log("CLOUDINARY CONFIG 👉", {
+//   name: process.env.CLOUDINARY_CLOUD_NAME,
+//   key: process.env.CLOUDINARY_API_KEY,
+// });
 
 const uploadOnCloudinary = async (localFilePath) => {
   try {
