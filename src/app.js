@@ -25,7 +25,14 @@ import commentRouter from "./routes/comment.routes.js"
 import likeRouter from "./routes/like.routes.js"
 import playlistRouter from "./routes/playlist.routes.js"
 import dashboardRouter from "./routes/dashboard.routes.js"
-
+app.get("/", (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: "YouTube Backend API is Live!",
+        author: "Vishnu Varshnay",
+        documentation: "https://github.com/Vishnuvarshnay" 
+    });
+});
 //routes declaration
 app.use("/api/v1/healthcheck", healthcheckRouter)
 app.use("/api/v1/users", userRouter)
